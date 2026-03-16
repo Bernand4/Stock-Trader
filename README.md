@@ -1,16 +1,17 @@
 # Stock-Trader App
 # My Portfolio Tracker and Covered Call Calculator
+# Built: March 2026 — Always Moving Forward 💪
 
 # Portfolio Holdings with Share Count and Buy Price
 portfolio = {
     "XOM":  {"shares": 48.6,  "buy_price": 123.44},
-    "VSNT": {"shares": 20.5,  "buy_price": 34.13},
     "XLE":  {"shares": 12.3,  "buy_price": 56.91},
     "SCHD": {"shares": 153.14,"buy_price": 26.51},
-    "USAR": {"shares": 60,    "buy_price": 21.15},
+    "VSNT": {"shares": 20.5,  "buy_price": 34.13},
     "JEDI": {"shares": 120,   "buy_price": 26.88},
     "DOW":  {"shares": 40,    "buy_price": 37.30},
     "OXY":  {"shares": 73.73, "buy_price": 54.25},
+    "DHT":  {"shares": 100,   "buy_price": 17.10},
 }
 
 # Print Each Holding with Position Value
@@ -32,10 +33,11 @@ for stock, data in portfolio.items():
 print(f"TOTAL PORTFOLIO VALUE: ${round(total_portfolio_value, 2)}")
 print("=" * 40)
 
-# Covered Call Income Calculator (JEDI)
-print("\nCOVERED CALL CALCULATOR - JEDI")
+# Covered Call Income Calculator — DHT
+print("\nCOVERED CALL CALCULATOR - DHT")
 print("=" * 40)
 premium = 0.45
 premium_income = premium * 100
-print(f"Premium Per Share:  ${premium}")
+print(f"Premium Per Share:   ${premium}")
 print(f"Income Per Contract: ${premium_income}")
+print("=" * 40)
