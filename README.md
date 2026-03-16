@@ -1,6 +1,4 @@
-# Stock-Trader App
-# My Portfolio Tracker and Covered Call Calculator
-# Built: March 2026 — Always Moving Forward 💪
+import yfinance as yf
 
 # Portfolio Holdings with Share Count and Buy Price
 portfolio = {
@@ -14,30 +12,35 @@ portfolio = {
     "DHT":  {"shares": 100,   "buy_price": 17.10},
 }
 
-# Print Each Holding with Position Value
-print("=" * 40)
-print("   MY PORTFOLIO TRACKER")
-print("=" * 40)
+# Print Portfolio Header
+print("=" * 45)
+print("      BERNIE'S PORTFOLIO TRACKER")
+print("=" * 45)
 
 total_portfolio_value = 0
+total_gain_loss = 0
 
 for stock, data in portfolio.items():
-    position_value = round(data["shares"] * data["buy_price"], 2)
+    ticker = yf.Ticker(stock)
+    current_price = round(ticker.fast_info['last_price'], 2)
+    position_value = round(data["shares"] * current_price, 2)
+    gain_loss = round((current_price - data["buy_price"]) * data["shares"], 2)
+    percent_change = round(((current_price - data["buy_price"]) / data["buy_price"]) * 100, 2)
+    
     total_portfolio_value += position_value
-    print(f"{stock}")
-    print(f"  Shares:         {data['shares']}")
-    print(f"  Buy Price:      ${data['buy_price']}")
-    print(f"  Position Value: ${position_value}")
-    print("-" * 40)
+    total_gain_loss += gain_loss
 
-print(f"TOTAL PORTFOLIO VALUE: ${round(total_portfolio_value, 2)}")
-print("=" * 40)
+    # Green arrow for gain, red for loss
+    direction = "🟢" if gain_loss >= 0 else "🔴"
 
-# Covered Call Income Calculator — DHT
-print("\nCOVERED CALL CALCULATOR - DHT")
-print("=" * 40)
-premium = 0.45
-premium_income = premium * 100
-print(f"Premium Per Share:   ${premium}")
-print(f"Income Per Contract: ${premium_income}")
-print("=" * 40)
+    print(f"\n{stock}")
+    print(f"  Shares:          {data['shares']}")
+    print(f"  Buy Price:       ${data['buy_price']}")
+    print(f"  Current Price:   ${current_price}")
+    print(f"  Position Value:  ${position_value}")
+    print(f"  Gain/Loss:       {direction} ${gain_loss} ({percent_change}%)")
+    print("-" * 45)
+
+print(f"\nTOTAL PORTFOLIO VALUE: ${round(total_portfolio_value, 2)}")
+print(f"TOTAL GAIN/LOSS:       {'🟢' if total_gain_loss >= 0 else '🔴'} ${round(total_gain_loss, 2)}")
+print("=" * 45)
