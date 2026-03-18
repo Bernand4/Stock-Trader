@@ -1,6 +1,6 @@
 import yfinance as yf
 
-# Portfolio Holdings with Share Count and Buy Price
+# Portfolio Holdings — needed in every cell that uses it
 portfolio = {
     "XOM":  {"shares": 48.6,  "buy_price": 123.44},
     "XLE":  {"shares": 12.3,  "buy_price": 56.91},
@@ -12,35 +12,46 @@ portfolio = {
     "DHT":  {"shares": 100,   "buy_price": 17.10},
 }
 
-# Print Portfolio Header
+# =============================================
+#      COVERED CALL SCREENER
+# =============================================
 print("=" * 45)
-print("      BERNIE'S PORTFOLIO TRACKER")
+print("      COVERED CALL SCREENER")
 print("=" * 45)
 
-total_portfolio_value = 0
-total_gain_loss = 0
+# Minimum shares needed for 1 covered call contract
+MIN_SHARES = 100
+
+# 10% above current price for strike suggestion
+STRIKE_BUFFER = 1.10
 
 for stock, data in portfolio.items():
     ticker = yf.Ticker(stock)
     current_price = round(ticker.fast_info['last_price'], 2)
-    position_value = round(data["shares"] * current_price, 2)
-    gain_loss = round((current_price - data["buy_price"]) * data["shares"], 2)
-    percent_change = round(((current_price - data["buy_price"]) / data["buy_price"]) * 100, 2)
-    
-    total_portfolio_value += position_value
-    total_gain_loss += gain_loss
-
-    # Green arrow for gain, red for loss
-    direction = "🟢" if gain_loss >= 0 else "🔴"
+    shares = data["shares"]
 
     print(f"\n{stock}")
-    print(f"  Shares:          {data['shares']}")
-    print(f"  Buy Price:       ${data['buy_price']}")
     print(f"  Current Price:   ${current_price}")
-    print(f"  Position Value:  ${position_value}")
-    print(f"  Gain/Loss:       {direction} ${gain_loss} ({percent_change}%)")
+    print(f"  Shares Owned:    {shares}")
+
+    # Check if eligible for covered call
+    if shares >= MIN_SHARES:
+        suggested_strike = round(current_price * STRIKE_BUFFER, 2)
+        contracts = int(shares // 100)
+
+        # Estimated premium — 2% of current price as rough estimate
+        est_premium = round(current_price * 0.02, 2)
+        est_income = round(est_premium * 100 * contracts, 2)
+
+        print(f"  Status:          ✅ Eligible — {contracts} contract(s)")
+        print(f"  Suggested Strike: ${suggested_strike}")
+        print(f"  Est. Premium:    ${est_premium}")
+        print(f"  Est. Income:     ${est_income}")
+    else:
+        shares_needed = round(MIN_SHARES - shares, 2)
+        print(f"  Status:          ❌ Need {shares_needed} more shares")
+
     print("-" * 45)
 
-print(f"\nTOTAL PORTFOLIO VALUE: ${round(total_portfolio_value, 2)}")
-print(f"TOTAL GAIN/LOSS:       {'🟢' if total_gain_loss >= 0 else '🔴'} ${round(total_gain_loss, 2)}")
+print("\n⚠️  Always verify premiums on Fidelity before trading.")
 print("=" * 45)
