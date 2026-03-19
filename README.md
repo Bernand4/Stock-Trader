@@ -1,57 +1,54 @@
-import yfinance as yf
+# =============================================
+#      DIVIDEND INCOME TRACKER
+# =============================================
 
-# Portfolio Holdings — needed in every cell that uses it
+# Portfolio Holdings with dividend rates
 portfolio = {
-    "XOM":  {"shares": 48.6,  "buy_price": 123.44},
-    "XLE":  {"shares": 12.3,  "buy_price": 56.91},
-    "SCHD": {"shares": 153.14,"buy_price": 26.51},
-    "VSNT": {"shares": 20.5,  "buy_price": 34.13},
-    "JEDI": {"shares": 120,   "buy_price": 26.88},
-    "DOW":  {"shares": 40,    "buy_price": 37.30},
-    "OXY":  {"shares": 73.73, "buy_price": 54.25},
-    "DHT":  {"shares": 100,   "buy_price": 17.10},
+    "XOM":  {"shares": 48.6,  "buy_price": 123.44, "annual_div": 3.96},
+    "XLE":  {"shares": 12.3,  "buy_price": 56.91,  "annual_div": 2.08},
+    "SCHD": {"shares": 153.14,"buy_price": 26.51,  "annual_div": 1.12},
+    "VSNT": {"shares": 20.5,  "buy_price": 34.13,  "annual_div": 0.08},
+    "JEDI": {"shares": 120,   "buy_price": 26.88,  "annual_div": 0.00},
+    "DOW":  {"shares": 40,    "buy_price": 37.30,  "annual_div": 2.80},
+    "OXY":  {"shares": 73.73, "buy_price": 54.25,  "annual_div": 0.96},
+    "DHT":  {"shares": 100,   "buy_price": 17.10,  "annual_div": 0.98},
 }
 
-# =============================================
-#      COVERED CALL SCREENER
-# =============================================
+# Monthly dividend goal
+MONTHLY_GOAL = 25.00
+
 print("=" * 45)
-print("      COVERED CALL SCREENER")
+print("      DIVIDEND INCOME TRACKER")
 print("=" * 45)
 
-# Minimum shares needed for 1 covered call contract
-MIN_SHARES = 100
-
-# 10% above current price for strike suggestion
-STRIKE_BUFFER = 1.10
+total_annual_income = 0
 
 for stock, data in portfolio.items():
-    ticker = yf.Ticker(stock)
-    current_price = round(ticker.fast_info['last_price'], 2)
-    shares = data["shares"]
+    annual_div = data["annual_div"]
 
-    print(f"\n{stock}")
-    print(f"  Current Price:   ${current_price}")
-    print(f"  Shares Owned:    {shares}")
+    if annual_div > 0:
+        annual_income = round(annual_div * data["shares"], 2)
+        quarterly_income = round(annual_income / 4, 2)
+        monthly_income = round(annual_income / 12, 2)
 
-    # Check if eligible for covered call
-    if shares >= MIN_SHARES:
-        suggested_strike = round(current_price * STRIKE_BUFFER, 2)
-        contracts = int(shares // 100)
+        total_annual_income += annual_income
 
-        # Estimated premium — 2% of current price as rough estimate
-        est_premium = round(current_price * 0.02, 2)
-        est_income = round(est_premium * 100 * contracts, 2)
-
-        print(f"  Status:          ✅ Eligible — {contracts} contract(s)")
-        print(f"  Suggested Strike: ${suggested_strike}")
-        print(f"  Est. Premium:    ${est_premium}")
-        print(f"  Est. Income:     ${est_income}")
+        print(f"\n{stock}")
+        print(f"  Shares:            {data['shares']}")
+        print(f"  Dividend/Share:    ${annual_div}/year")
+        print(f"  Quarterly Income:  ${quarterly_income}")
+        print(f"  Annual Income:     ${annual_income} 🟢")
+        print("-" * 45)
     else:
-        shares_needed = round(MIN_SHARES - shares, 2)
-        print(f"  Status:          ❌ Need {shares_needed} more shares")
+        print(f"\n{stock}")
+        print(f"  No dividend paid ❌")
+        print("-" * 45)
 
-    print("-" * 45)
+# Summary
+total_monthly = round(total_annual_income / 12, 2)
+goal_status = "✅ ACHIEVED!" if total_monthly >= MONTHLY_GOAL else f"❌ Need ${round(MONTHLY_GOAL - total_monthly, 2)} more/month"
 
-print("\n⚠️  Always verify premiums on Fidelity before trading.")
+print(f"\nTOTAL ANNUAL DIVIDEND INCOME:  ${round(total_annual_income, 2)}")
+print(f"MONTHLY AVERAGE:               ${total_monthly}")
+print(f"GOAL: ${MONTHLY_GOAL}/month     {goal_status}")
 print("=" * 45)
