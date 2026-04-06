@@ -1,0 +1,86 @@
+# 📈 Bernie's Stock-Trader App
+### Built by Bernard Langan | Always Moving Forward 💪
+
+---
+
+## Overview
+A personal stock portfolio tracker and options trading assistant 
+built from scratch in Python. Tracks live stock prices, calculates 
+gain/loss, screens for covered call opportunities, and monitors 
+dividend income.
+
+---
+
+## Features
+
+| File | Description |
+|------|-------------|
+| `portfolio.py` | Master holdings data — stocks, shares, buy prices, dividends |
+| `tracker.py` | Live portfolio tracker with real time prices and gain/loss |
+| `screener.py` | Covered call screener — identifies eligible positions |
+| `dividends.py` | Dividend income tracker vs monthly goal |
+| `trades.py` | Complete trade history log |
+| `alerts.py` | Price alert system — flags big gainers and positions to watch |
+
+---
+
+## Current Portfolio
+
+| Stock | Shares | Buy Price |
+|-------|--------|-----------|
+| XOM | 48.6 | $123.44 |
+| XLE | 12.3 | $56.91 |
+| SCHD | 153.14 | $26.51 |
+| VSNT | 20.5 | $34.13 |
+| JEDI | 120 | $26.88 |
+| DOW | 40 | $37.30 |
+| OXY | 73.73 | $54.25 |
+| DHT | 100 | $17.10 |
+
+---
+
+## Portfolio Stats
+- 💰 **Total Portfolio Value:** $24,486.00
+- 📈 **Total Gain:** $2,599.00
+- 💵 **Monthly Dividend Income:** $56.00
+- 🎯 **Dividend Goal:** $25/month ✅ Achieved
+
+---
+
+## Covered Call Eligible Positions
+- ✅ DHT — 100 shares
+- ✅ SCHD — 153 shares
+- ✅ JEDI — 120 shares
+
+---
+
+## How to Run
+1. Open Google Colab
+2. Open **Bernie's Stock-Trader App**
+3. Click **Runtime → Run All**
+4. View your live portfolio instantly
+
+---
+
+## Built With
+- Python 3
+- yfinance — live stock data
+- Google Colab — runtime environment
+- GitHub — version control
+
+---
+
+## Progress
+- [x] Portfolio Tracker
+- [x] Live Stock Prices
+- [x] Gain/Loss Calculator
+- [x] Covered Call Screener
+- [x] Dividend Income Tracker
+- [x] Trade History Log
+- [x] Price Alerts
+- [ ] Full Dashboard Interface
+- [ ] Automated Morning Report
+
+---
+
+*Started March 2026 — Built from zero, brick by brick.* 🧱
